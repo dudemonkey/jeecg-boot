@@ -1,9 +1,3 @@
-
-
-![JEECG](https://static.oschina.net/uploads/img/201905/24164523_XDhg.png "JeecgBoot低代码开发平台")
-
-
-
 JEECG BOOT 低代码开发平台（前后端分离版本）
 ===============
 
@@ -16,7 +10,8 @@ JEECG BOOT 低代码开发平台（前后端分离版本）
 [![GitHub stars](https://img.shields.io/github/stars/zhangdaiscott/jeecg-boot.svg?style=social&label=Stars)](https://github.com/zhangdaiscott/jeecg-boot)
 [![GitHub forks](https://img.shields.io/github/forks/zhangdaiscott/jeecg-boot.svg?style=social&label=Fork)](https://github.com/zhangdaiscott/jeecg-boot)
 
-
+2021年04月23日 注：  
+v2.3.0.1 版本，将去除微服务、去除redis，作为一个单体架构应用使用 fight...
 
 项目介绍：
 -----------------------------------
