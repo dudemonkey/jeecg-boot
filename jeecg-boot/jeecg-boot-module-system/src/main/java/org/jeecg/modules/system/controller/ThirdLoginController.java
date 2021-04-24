@@ -48,8 +48,8 @@ public class ThirdLoginController {
 	
 	@Autowired
 	private BaseCommonService baseCommonService;
-	@Autowired
-    private RedisUtil redisUtil;
+//	@Autowired
+//    private RedisUtil redisUtil;
 	@Autowired
 	private AuthRequestFactory factory;
 
@@ -122,7 +122,10 @@ public class ThirdLoginController {
 	public Result<String> thirdUserCreate(@RequestBody ThirdLoginModel model) {
 		log.info("第三方登录创建新账号：" );
 		Result<String> res = new Result<>();
-		Object operateCode = redisUtil.get(CommonConstant.THIRD_LOGIN_CODE);
+//		Object operateCode = redisUtil.get(CommonConstant.THIRD_LOGIN_CODE);
+		// TODO 清理redis
+		Object operateCode = "";
+
 		if(operateCode==null || !operateCode.toString().equals(model.getOperateCode())){
 			res.setSuccess(false);
 			res.setMessage("校验失败");
@@ -152,7 +155,9 @@ public class ThirdLoginController {
 	@ResponseBody
 	public Result<String> checkPassword(@RequestBody JSONObject json) {
 		Result<String> result = new Result<>();
-		Object operateCode = redisUtil.get(CommonConstant.THIRD_LOGIN_CODE);
+		// TODO 清理reids
+		Object operateCode = "";
+//		Object operateCode = redisUtil.get(CommonConstant.THIRD_LOGIN_CODE);
 		if(operateCode==null || !operateCode.toString().equals(json.getString("operateCode"))){
 			result.setSuccess(false);
 			result.setMessage("校验失败");
@@ -201,9 +206,9 @@ public class ThirdLoginController {
 	private String saveToken(SysUser user) {
 		// 生成token
 		String token = JwtUtil.sign(user.getUsername(), user.getPassword());
-		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
+//		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		// 设置超时时间
-		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
+//		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
 		return token;
 	}
 	
@@ -263,7 +268,9 @@ public class ThirdLoginController {
 		}else{
 			// 不存在手机号，创建用户
 			String smscode = jsonObject.getString("captcha");
-			Object code = redisUtil.get(phone);
+			// TODO 清理redis
+			Object code = "";
+//			Object code = redisUtil.get(phone);
 			if (!smscode.equals(code)) {
 				result.setMessage("手机验证码错误");
 				result.setSuccess(false);

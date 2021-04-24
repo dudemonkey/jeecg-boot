@@ -15,7 +15,6 @@ import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.DateUtils;
-import org.jeecg.common.util.RedisUtil;
 import org.jeecg.modules.demo.test.entity.JeecgDemo;
 import org.jeecg.modules.demo.test.service.IJeecgDemoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +42,6 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     @Autowired
     private IJeecgDemoService jeecgDemoService;
 
-    @Autowired
-    private RedisUtil redisUtil;
 
     /**
      * 分页列表查询
@@ -165,45 +162,6 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
         return super.importExcel(request, response, JeecgDemo.class);
     }
 
-    // =====Redis 示例===============================================================================================
-
-    /**
-     * redis操作 -- set
-     */
-    @GetMapping(value = "/redisSet")
-    public void redisSet() {
-        redisUtil.set("name", "张三" + DateUtils.now());
-    }
-
-    /**
-     * redis操作 -- get
-     */
-    @GetMapping(value = "/redisGet")
-    public String redisGet() {
-        return (String) redisUtil.get("name");
-    }
-
-    /**
-     * redis操作 -- setObj
-     */
-    @GetMapping(value = "/redisSetObj")
-    public void redisSetObj() {
-        JeecgDemo p = new JeecgDemo();
-        p.setAge(10);
-        p.setBirthday(new Date());
-        p.setContent("hello");
-        p.setName("张三");
-        p.setSex("男");
-        redisUtil.set("user-zdh", p);
-    }
-
-    /**
-     * redis操作 -- setObj
-     */
-    @GetMapping(value = "/redisGetObj")
-    public Object redisGetObj() {
-        return redisUtil.get("user-zdh");
-    }
 
     /**
      * redis操作 -- get

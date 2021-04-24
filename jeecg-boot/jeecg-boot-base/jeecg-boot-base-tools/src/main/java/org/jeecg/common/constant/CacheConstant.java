@@ -7,6 +7,9 @@ package org.jeecg.common.constant;
  */
 public interface CacheConstant {
 
+	// 登录token
+	String token_cache = "session:token";
+
 	/**
 	 * 字典信息缓存
 	 */

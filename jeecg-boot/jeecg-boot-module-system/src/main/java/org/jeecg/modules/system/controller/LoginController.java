@@ -50,8 +50,8 @@ public class LoginController {
 	private ISysBaseAPI sysBaseAPI;
 	@Autowired
 	private ISysLogService logService;
-	@Autowired
-    private RedisUtil redisUtil;
+//	@Autowired
+//    private RedisUtil redisUtil;
 	@Autowired
     private ISysDepartService sysDepartService;
 	@Autowired
@@ -80,12 +80,14 @@ public class LoginController {
         }
         String lowerCaseCaptcha = captcha.toLowerCase();
 		String realKey = MD5Util.MD5Encode(lowerCaseCaptcha+sysLoginModel.getCheckKey(), "utf-8");
-		Object checkCode = redisUtil.get(realKey);
+		// TODO 清理redis
+		Object checkCode = "";
+//		Object checkCode = redisUtil.get(realKey);
 		//当进入登录页时，有一定几率出现验证码错误 #1714
-		if(checkCode==null || !checkCode.toString().equals(lowerCaseCaptcha)) {
-			result.error500("验证码错误");
-			return result;
-		}
+//		if(checkCode==null || !checkCode.toString().equals(lowerCaseCaptcha)) {
+//			result.error500("验证码错误");
+//			return result;
+//		}
 		//update-end-author:taoyan date:20190828 for:校验验证码
 		
 		//1. 校验用户是否有效
@@ -110,7 +112,8 @@ public class LoginController {
 		//用户登录信息
 		userInfo(sysUser, result);
 		//update-begin--Author:liusq  Date:20210126  for：登录成功，删除redis中的验证码
-		redisUtil.del(realKey);
+		// TODO 清理redis
+//		redisUtil.del(realKey);
 		//update-begin--Author:liusq  Date:20210126  for：登录成功，删除redis中的验证码
 		LoginUser loginUser = new LoginUser();
 		BeanUtils.copyProperties(sysUser, loginUser);
@@ -140,11 +143,11 @@ public class LoginController {
 			//update-end--Author:wangshuai  Date:20200714  for：登出日志没有记录人员
 	    	log.info(" 用户名:  "+sysUser.getRealname()+",退出成功！ ");
 	    	//清空用户登录Token缓存
-	    	redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + token);
+//	    	redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + token);
 	    	//清空用户登录Shiro权限缓存
-			redisUtil.del(CommonConstant.PREFIX_USER_SHIRO_CACHE + sysUser.getId());
+//			redisUtil.del(CommonConstant.PREFIX_USER_SHIRO_CACHE + sysUser.getId());
 			//清空用户的缓存信息（包括部门信息），例如sys:cache:user::<username>
-			redisUtil.del(String.format("%s::%s", CacheConstant.SYS_USERS_CACHE, sysUser.getUsername()));
+//			redisUtil.del(String.format("%s::%s", CacheConstant.SYS_USERS_CACHE, sysUser.getUsername()));
 			//调用shiro的logout
 			SecurityUtils.getSubject().logout();
 	    	return Result.ok("退出登录成功！");
@@ -246,7 +249,9 @@ public class LoginController {
 			result.setSuccess(false);
 			return result;
 		}
-		Object object = redisUtil.get(mobile);
+		// TODO 清理redis
+		Object object = "";
+//		Object object = redisUtil.get(mobile);
 		if (object != null) {
 			result.setMessage("验证码10分钟内，仍然有效！");
 			result.setSuccess(false);
@@ -298,7 +303,8 @@ public class LoginController {
 				return result;
 			}
 			//验证码10分钟内有效
-			redisUtil.set(mobile, captcha, 600);
+			// TODO 清理redis
+//			redisUtil.set(mobile, captcha, 600);
 			//update-begin--Author:scott  Date:20190812 for：issues#391
 			//result.setResult(captcha);
 			//update-end--Author:scott  Date:20190812 for：issues#391
@@ -333,7 +339,9 @@ public class LoginController {
 		}
 		
 		String smscode = jsonObject.getString("captcha");
-		Object code = redisUtil.get(phone);
+		// TODO 清理redis
+		Object code = "";
+//		Object code = redisUtil.get(phone);
 		if (!smscode.equals(code)) {
 			result.setMessage("手机验证码错误");
 			return result;
@@ -360,8 +368,8 @@ public class LoginController {
 		// 生成token
 		String token = JwtUtil.sign(username, syspassword);
         // 设置token缓存有效时间
-		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
+//		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
+//		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
 
 		// 获取用户部门信息
 		JSONObject obj = new JSONObject();
@@ -417,7 +425,8 @@ public class LoginController {
 			String code = RandomUtil.randomString(BASE_CHECK_CODES,4);
 			String lowerCaseCode = code.toLowerCase();
 			String realKey = MD5Util.MD5Encode(lowerCaseCode+key, "utf-8");
-			redisUtil.set(realKey, lowerCaseCode, 60);
+			// TODO 清理redis
+//			redisUtil.set(realKey, lowerCaseCode, 60);
 			String base64 = RandImageUtil.generate(code);
 			res.setSuccess(true);
 			res.setResult(base64);
@@ -474,8 +483,9 @@ public class LoginController {
 		// 生成token
 		String token = JwtUtil.sign(username, syspassword);
 		// 设置超时时间
-		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
+		// TODO 清理redis
+//		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
+//		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
 
 		//token 信息
 		obj.put("token", token);
@@ -500,7 +510,9 @@ public class LoginController {
 		}
 		String lowerCaseCaptcha = captcha.toLowerCase();
 		String realKey = MD5Util.MD5Encode(lowerCaseCaptcha+checkKey, "utf-8");
-		Object checkCode = redisUtil.get(realKey);
+		// TODO 清理redis
+		Object checkCode = "";
+//		Object checkCode = redisUtil.get(realKey);
 		if(checkCode==null || !checkCode.equals(lowerCaseCaptcha)) {
 			return Result.error("验证码错误");
 		}

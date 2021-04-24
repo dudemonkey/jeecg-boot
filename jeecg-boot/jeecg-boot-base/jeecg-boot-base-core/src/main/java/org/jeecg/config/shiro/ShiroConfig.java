@@ -1,5 +1,6 @@
 package org.jeecg.config.shiro;
 
+import com.google.common.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -8,10 +9,6 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.crazycake.shiro.IRedisManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisClusterManager;
-import org.crazycake.shiro.RedisManager;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.shiro.filters.CustomShiroFilterFactoryBean;
@@ -19,14 +16,13 @@ import org.jeecg.config.shiro.filters.JwtFilter;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.util.StringUtils;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
@@ -44,8 +40,7 @@ public class ShiroConfig {
 
     @Value("${jeecg.shiro.excludeUrls}")
     private String excludeUrls;
-    @Resource
-    LettuceConnectionFactory lettuceConnectionFactory;
+
     @Autowired
     private Environment env;
 
@@ -164,7 +159,7 @@ public class ShiroConfig {
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         securityManager.setSubjectDAO(subjectDAO);
         //自定义缓存实现,使用redis
-        securityManager.setCacheManager(redisCacheManager());
+//        securityManager.setCacheManager(redisCacheManager());
         return securityManager;
     }
 
@@ -198,54 +193,5 @@ public class ShiroConfig {
         return advisor;
     }
 
-    /**
-     * cacheManager 缓存 redis实现
-     * 使用的是shiro-redis开源插件
-     *
-     * @return
-     */
-    public RedisCacheManager redisCacheManager() {
-        log.info("===============(1)创建缓存管理器RedisCacheManager");
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
-        //redis中针对不同用户缓存(此处的id需要对应user实体中的id字段,用于唯一标识)
-        redisCacheManager.setPrincipalIdFieldName("id");
-        //用户权限信息缓存时间
-        redisCacheManager.setExpire(200000);
-        return redisCacheManager;
-    }
-
-    /**
-     * 配置shiro redisManager
-     * 使用的是shiro-redis开源插件
-     *
-     * @return
-     */
-    @Bean
-    public IRedisManager redisManager() {
-        log.info("===============(2)创建RedisManager,连接Redis..");
-        IRedisManager manager;
-        // redis 单机支持，在集群为空，或者集群无机器时候使用 add by jzyadmin@163.com
-        if (lettuceConnectionFactory.getClusterConfiguration() == null || lettuceConnectionFactory.getClusterConfiguration().getClusterNodes().isEmpty()) {
-            RedisManager redisManager = new RedisManager();
-            redisManager.setHost(lettuceConnectionFactory.getHostName());
-            redisManager.setPort(lettuceConnectionFactory.getPort());
-            redisManager.setDatabase(lettuceConnectionFactory.getDatabase());
-            redisManager.setTimeout(0);
-            if (!StringUtils.isEmpty(lettuceConnectionFactory.getPassword())) {
-                redisManager.setPassword(lettuceConnectionFactory.getPassword());
-            }
-            manager = redisManager;
-        }else{
-            // redis集群支持，优先使用集群配置
-            RedisClusterManager redisManager = new RedisClusterManager();
-            Set<HostAndPort> portSet = new HashSet<>();
-            lettuceConnectionFactory.getClusterConfiguration().getClusterNodes().forEach(node -> portSet.add(new HostAndPort(node.getHost() , node.getPort())));
-            JedisCluster jedisCluster = new JedisCluster(portSet);
-            redisManager.setJedisCluster(jedisCluster);
-            manager = redisManager;
-        }
-        return manager;
-    }
 
 }

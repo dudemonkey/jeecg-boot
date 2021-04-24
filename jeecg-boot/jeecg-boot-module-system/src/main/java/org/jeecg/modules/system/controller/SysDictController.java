@@ -36,7 +36,7 @@ import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.redis.core.RedisTemplate;
+//import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -63,8 +63,8 @@ public class SysDictController {
 	private ISysDictService sysDictService;
 	@Autowired
 	private ISysDictItemService sysDictItemService;
-	@Autowired
-	public RedisTemplate<String, Object> redisTemplate;
+//	@Autowired
+//	public RedisTemplate<String, Object> redisTemplate;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Result<IPage<SysDict>> queryPageList(SysDict sysDict,@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -405,18 +405,18 @@ public class SysDictController {
 	public Result<?> refleshCache() {
 		Result<?> result = new Result<SysDict>();
 		//清空字典缓存
-		Set keys = redisTemplate.keys(CacheConstant.SYS_DICT_CACHE + "*");
-		Set keys2 = redisTemplate.keys(CacheConstant.SYS_DICT_TABLE_CACHE + "*");
-		Set keys3 = redisTemplate.keys(CacheConstant.SYS_DEPARTS_CACHE + "*");
-		Set keys4 = redisTemplate.keys(CacheConstant.SYS_DEPART_IDS_CACHE + "*");
-		Set keys5 = redisTemplate.keys( "jmreport:cache:dict*");
-		Set keys6 = redisTemplate.keys( "jmreport:cache:dictTable*");
-		redisTemplate.delete(keys);
-		redisTemplate.delete(keys2);
-		redisTemplate.delete(keys3);
-		redisTemplate.delete(keys4);
-		redisTemplate.delete(keys5);
-		redisTemplate.delete(keys6);
+//		Set keys = redisTemplate.keys(CacheConstant.SYS_DICT_CACHE + "*");
+//		Set keys2 = redisTemplate.keys(CacheConstant.SYS_DICT_TABLE_CACHE + "*");
+//		Set keys3 = redisTemplate.keys(CacheConstant.SYS_DEPARTS_CACHE + "*");
+//		Set keys4 = redisTemplate.keys(CacheConstant.SYS_DEPART_IDS_CACHE + "*");
+//		Set keys5 = redisTemplate.keys( "jmreport:cache:dict*");
+//		Set keys6 = redisTemplate.keys( "jmreport:cache:dictTable*");
+//		redisTemplate.delete(keys);
+//		redisTemplate.delete(keys2);
+//		redisTemplate.delete(keys3);
+//		redisTemplate.delete(keys4);
+//		redisTemplate.delete(keys5);
+//		redisTemplate.delete(keys6);
 		return result;
 	}
 

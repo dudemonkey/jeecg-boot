@@ -168,9 +168,10 @@ public class SqlUtils {
      * @return
      */
     public static String createPageSqlByDBKey(String dbKey, String sql, int page, int rows) {
-        DynamicDataSourceModel dynamicSourceEntity = DataSourceCachePool.getCacheDynamicDataSourceModel(dbKey);
-        String dbType = dynamicSourceEntity.getDbType();
-        return createPageSqlByDBType(dbType, sql, page, rows);
+//        DynamicDataSourceModel dynamicSourceEntity = DataSourceCachePool.getCacheDynamicDataSourceModel(dbKey);
+//        String dbType = dynamicSourceEntity.getDbType();
+//        return createPageSqlByDBType(dbType, sql, page, rows);
+        return null;
     }
 
     private static int getAfterSelectInsertPoint(String sql) {

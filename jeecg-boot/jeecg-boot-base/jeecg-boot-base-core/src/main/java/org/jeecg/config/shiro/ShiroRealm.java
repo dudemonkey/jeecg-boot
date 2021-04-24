@@ -1,6 +1,5 @@
 package org.jeecg.config.shiro;
 
-import cn.hutool.crypto.SecureUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -11,7 +10,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.jeecg.common.api.CommonAPI;
-import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
@@ -39,7 +37,7 @@ public class ShiroRealm extends AuthorizingRealm {
     private CommonAPI commonAPI;
 
 	@Lazy
-    @Resource(name = "guavaCacheUtil")
+    @Resource(name = "tokenCacheUtil")
     private AbstractCacheUtil cacheUtil;
 
     /**
@@ -145,16 +143,16 @@ public class ShiroRealm extends AuthorizingRealm {
      * @return
      */
     public boolean jwtTokenRefresh(String token, String userName, String passWord) {
-        String cacheToken = String.valueOf(cacheUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
-        if (oConvertUtils.isNotEmpty(cacheToken)) {
-            // 校验token有效性
-            if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-                String newAuthorization = JwtUtil.sign(userName, passWord);
-                // 设置超时时间
-                cacheUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
-                cacheUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);
-                log.debug("——————————用户在线操作，更新token保证不掉线—————————jwtTokenRefresh——————— "+ token);
-            }
+//        String cacheToken = String.valueOf(cacheUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
+//        if (oConvertUtils.isNotEmpty(cacheToken)) {
+//            // 校验token有效性
+//            if (!JwtUtil.verify(cacheToken, userName, passWord)) {
+//                String newAuthorization = JwtUtil.sign(userName, passWord);
+//                // 设置超时时间
+//                cacheUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
+//                cacheUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);
+//                log.debug("——————————用户在线操作，更新token保证不掉线—————————jwtTokenRefresh——————— "+ token);
+//            }
             //update-begin--Author:scott  Date:20191005  for：解决每次请求，都重写redis中 token缓存问题
 //			else {
 //				// 设置超时时间
@@ -163,8 +161,8 @@ public class ShiroRealm extends AuthorizingRealm {
 //			}
             //update-end--Author:scott  Date:20191005   for：解决每次请求，都重写redis中 token缓存问题
             return true;
-        }
-        return false;
+//        }
+//        return false;
     }
 
     /**

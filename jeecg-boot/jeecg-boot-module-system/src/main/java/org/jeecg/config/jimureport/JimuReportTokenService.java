@@ -4,7 +4,7 @@ import org.jeecg.common.constant.DataBaseConstant;
 import org.jeecg.common.system.api.ISysBaseAPI;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.SysUserCacheInfo;
-import org.jeecg.common.util.RedisUtil;
+//import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.TokenUtils;
 import org.jeecg.modules.jmreport.api.JmReportTokenServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,6 @@ import java.util.Map;
 public class JimuReportTokenService implements JmReportTokenServiceI {
     @Autowired
     private ISysBaseAPI sysBaseAPI;
-    @Autowired
-    @Lazy
-    private RedisUtil redisUtil;
 
     @Override
     public String getToken(HttpServletRequest request) {
@@ -40,7 +37,7 @@ public class JimuReportTokenService implements JmReportTokenServiceI {
 
     @Override
     public Boolean verifyToken(String token) {
-        return TokenUtils.verifyToken(token, sysBaseAPI, redisUtil);
+        return TokenUtils.verifyToken(token, sysBaseAPI);
     }
 
     @Override

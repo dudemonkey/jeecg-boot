@@ -85,8 +85,8 @@ public class SysUserController {
     @Autowired
     private ISysDepartRoleService departRoleService;
 
-	@Autowired
-	private RedisUtil redisUtil;
+//	@Autowired
+//	private RedisUtil redisUtil;
 
     @Value("${jeecg.path.upload}")
     private String upLoadPath;
@@ -855,7 +855,9 @@ public class SysUserController {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String phone = jsonObject.getString("phone");
 		String smscode = jsonObject.getString("smscode");
-		Object code = redisUtil.get(phone);
+		// TODO 清理redis
+        Object code = "";
+//		Object code = redisUtil.get(phone);
 		String username = jsonObject.getString("username");
 		//未设置用户名，则用手机号作为用户名
 		if(oConvertUtils.isEmpty(username)){
@@ -964,14 +966,16 @@ public class SysUserController {
 		Result<Map<String,String>> result = new Result<Map<String,String>>();
 		String phone = jsonObject.getString("phone");
 		String smscode = jsonObject.getString("smscode");
-		Object code = redisUtil.get(phone);
+		// TODO 清理redis
+		Object code = "";
+//		Object code = redisUtil.get(phone);
 		if (!smscode.equals(code)) {
 			result.setMessage("手机验证码错误");
 			result.setSuccess(false);
 			return result;
 		}
 		//设置有效时间
-		redisUtil.set(phone, smscode,600);
+//		redisUtil.set(phone, smscode,600);
 		//新增查询用户名
 		LambdaQueryWrapper<SysUser> query = new LambdaQueryWrapper<>();
         query.eq(SysUser::getPhone,phone);
@@ -1000,7 +1004,9 @@ public class SysUserController {
         }
 
         SysUser sysUser=new SysUser();
-        Object object= redisUtil.get(phone);
+//        Object object= redisUtil.get(phone);
+        // TODO 清理redis
+        Object object= "";
         if(null==object) {
         	result.setMessage("短信验证码失效！");
             result.setSuccess(false);
@@ -1319,7 +1325,9 @@ public class SysUserController {
             result.setSuccess(false);
             return result;
         }
-        Object object= redisUtil.get(phone);
+        // TODO 清理redis
+        Object object= "";
+//        Object object= redisUtil.get(phone);
         if(null==object) {
             result.setMessage("短信验证码失效！");
             result.setSuccess(false);

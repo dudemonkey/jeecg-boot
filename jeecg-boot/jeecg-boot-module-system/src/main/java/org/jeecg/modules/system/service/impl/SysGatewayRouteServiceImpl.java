@@ -13,7 +13,7 @@ import org.jeecg.modules.system.entity.SysGatewayRoute;
 import org.jeecg.modules.system.mapper.SysGatewayRouteMapper;
 import org.jeecg.modules.system.service.ISysGatewayRouteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+//import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +31,14 @@ import java.util.Map;
 @Slf4j
 public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMapper, SysGatewayRoute> implements ISysGatewayRouteService {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+//    @Autowired
+//    private RedisTemplate<String, Object> redisTemplate;
 
 
     @Override
     public void addRoute2Redis(String key) {
         List<SysGatewayRoute> ls = this.list(new LambdaQueryWrapper<SysGatewayRoute>().eq(SysGatewayRoute::getStatus, 1));
-        redisTemplate.opsForValue().set(key, JSON.toJSONString(ls));
+//        redisTemplate.opsForValue().set(key, JSON.toJSONString(ls));
     }
 
     @Override
@@ -90,12 +90,14 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
         BaseMap params = new BaseMap();
         params.put(GlobalConstants.HANDLER_NAME, "loderRouderHandler");
         //刷新网关
-        redisTemplate.convertAndSend(GlobalConstants.REDIS_TOPIC_NAME, params);
+        // TODO 清理redis
+//        redisTemplate.convertAndSend(GlobalConstants.REDIS_TOPIC_NAME, params);
     }
 
     @Override
     public void clearRedis() {
-        redisTemplate.opsForValue().set(CacheConstant.GATEWAY_ROUTES, null);
+        // TODO 清理redis
+//        redisTemplate.opsForValue().set(CacheConstant.GATEWAY_ROUTES, null);
     }
 
 

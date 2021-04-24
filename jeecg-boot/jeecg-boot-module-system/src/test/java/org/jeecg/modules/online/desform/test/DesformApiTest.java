@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.jeecg.JeecgSystemApplication;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.common.util.RedisUtil;
+//import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.RestUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +24,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SuppressWarnings({"FieldCanBeLocal", "SpringJavaAutowiredMembersInspection"})
 public class DesformApiTest {
 
-    @Autowired
-    private RedisUtil redisUtil;
+//    @Autowired
+//    private RedisUtil redisUtil;
 
     /**
      * 测试地址：实际使用时替换成你自己的地址
@@ -175,8 +175,8 @@ public class DesformApiTest {
 
     private String getToken() {
         String token = JwtUtil.sign(USERNAME, PASSWORD);
-        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, 60);
+//        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
+//        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, 60);
         return token;
     }
 

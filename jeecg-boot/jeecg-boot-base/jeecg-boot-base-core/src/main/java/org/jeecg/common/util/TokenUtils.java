@@ -35,7 +35,7 @@ public class TokenUtils {
     /**
      * 验证Token
      */
-    public static boolean verifyToken(HttpServletRequest request, CommonAPI commonAPI, RedisUtil redisUtil) {
+    public static boolean verifyToken(HttpServletRequest request, CommonAPI commonAPI) {
         log.debug(" -- url --" + request.getRequestURL());
         String token = getTokenByRequest(request);
 
@@ -59,7 +59,7 @@ public class TokenUtils {
             throw new AuthenticationException("账号已锁定,请联系管理员!");
         }
         // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, user.getPassword(), redisUtil)) {
+        if (!jwtTokenRefresh(token, username, user.getPassword())) {
             throw new AuthenticationException("Token失效，请重新登录");
         }
         return true;
@@ -70,19 +70,18 @@ public class TokenUtils {
      * @param token
      * @param userName
      * @param passWord
-     * @param redisUtil
      * @return
      */
-    private static boolean jwtTokenRefresh(String token, String userName, String passWord, RedisUtil redisUtil) {
-        String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
-        if (oConvertUtils.isNotEmpty(cacheToken)) {
-            // 校验token有效性
-            if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-                String newAuthorization = JwtUtil.sign(userName, passWord);
-                // 设置Toekn缓存有效时间
-                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
-                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
-            }
+    private static boolean jwtTokenRefresh(String token, String userName, String passWord) {
+//        String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
+//        if (oConvertUtils.isNotEmpty(cacheToken)) {
+//            // 校验token有效性
+//            if (!JwtUtil.verify(cacheToken, userName, passWord)) {
+//                String newAuthorization = JwtUtil.sign(userName, passWord);
+//                // 设置Toekn缓存有效时间
+//                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
+//                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
+//            }
             //update-begin--Author:scott  Date:20191005  for：解决每次请求，都重写redis中 token缓存问题
 //            else {
 //                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, cacheToken);
@@ -91,14 +90,14 @@ public class TokenUtils {
 //            }
             //update-end--Author:scott  Date:20191005  for：解决每次请求，都重写redis中 token缓存问题
             return true;
-        }
-        return false;
+//        }
+//        return false;
     }
 
     /**
      * 验证Token
      */
-    public static boolean verifyToken(String token, CommonAPI commonAPI, RedisUtil redisUtil) {
+    public static boolean verifyToken(String token, CommonAPI commonAPI ) {
         if (StringUtils.isBlank(token)) {
             throw new AuthenticationException("token不能为空!");
         }
@@ -119,7 +118,7 @@ public class TokenUtils {
             throw new AuthenticationException("账号已被锁定,请联系管理员!");
         }
         // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, user.getPassword(), redisUtil)) {
+        if (!jwtTokenRefresh(token, username, user.getPassword() )) {
             throw new AuthenticationException("Token失效，请重新登录!");
         }
         return true;

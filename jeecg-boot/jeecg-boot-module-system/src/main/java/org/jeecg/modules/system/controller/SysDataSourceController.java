@@ -1,10 +1,5 @@
 package org.jeecg.modules.system.controller;
 
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.HexUtil;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
-import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,7 +13,6 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.common.util.dynamic.db.DataSourceCachePool;
 import org.jeecg.modules.system.entity.SysDataSource;
 import org.jeecg.modules.system.service.ISysDataSourceService;
 import org.jeecg.modules.system.util.SecurityUtil;
@@ -132,7 +126,8 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     public Result<?> edit(@RequestBody SysDataSource sysDataSource) {
         try {
             SysDataSource d = sysDataSourceService.getById(sysDataSource.getId());
-            DataSourceCachePool.removeCache(d.getCode());
+            // TODO 清理 多数据源
+//            DataSourceCachePool.removeCache(d.getCode());
             String dbPassword = sysDataSource.getDbPassword();
             if(StringUtils.isNotBlank(dbPassword)){
                 String encrypt = SecurityUtil.jiami(dbPassword);
@@ -156,7 +151,8 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     @DeleteMapping(value = "/delete")
     public Result<?> delete(@RequestParam(name = "id") String id) {
         SysDataSource sysDataSource = sysDataSourceService.getById(id);
-        DataSourceCachePool.removeCache(sysDataSource.getCode());
+        // TODO 清理 多数据源
+//        DataSourceCachePool.removeCache(sysDataSource.getCode());
         sysDataSourceService.removeById(id);
         return Result.ok("删除成功!");
     }
@@ -174,7 +170,8 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
         List<String> idList = Arrays.asList(ids.split(","));
         idList.forEach(item->{
             SysDataSource sysDataSource = sysDataSourceService.getById(item);
-            DataSourceCachePool.removeCache(sysDataSource.getCode());
+            // TODO 清理 多数据源
+//            DataSourceCachePool.removeCache(sysDataSource.getCode());
         });
         this.sysDataSourceService.removeByIds(idList);
         return Result.ok("批量删除成功！");

@@ -68,22 +68,23 @@ public class DynamicDBUtil {
      */
     public static DruidDataSource getDbSourceByDbKey(final String dbKey) {
         //获取多数据源配置
-        DynamicDataSourceModel dbSource = DataSourceCachePool.getCacheDynamicDataSourceModel(dbKey);
-        //先判断缓存中是否存在数据库链接
-        DruidDataSource cacheDbSource = DataSourceCachePool.getCacheBasicDataSource(dbKey);
-        if (cacheDbSource != null && !cacheDbSource.isClosed()) {
-            log.debug("--------getDbSourceBydbKey------------------从缓存中获取DB连接-------------------");
-            return cacheDbSource;
-        } else {
-            DruidDataSource dataSource = getJdbcDataSource(dbSource);
-            if(dataSource!=null && dataSource.isEnable()){
-                DataSourceCachePool.putCacheBasicDataSource(dbKey, dataSource);
-            }else{
-                throw new JeecgBootException("动态数据源连接失败，dbKey："+dbKey);
-            }
-            log.info("--------getDbSourceBydbKey------------------创建DB数据库连接-------------------");
-            return dataSource;
-        }
+//        DynamicDataSourceModel dbSource = DataSourceCachePool.getCacheDynamicDataSourceModel(dbKey);
+//        //先判断缓存中是否存在数据库链接
+//        DruidDataSource cacheDbSource = DataSourceCachePool.getCacheBasicDataSource(dbKey);
+//        if (cacheDbSource != null && !cacheDbSource.isClosed()) {
+//            log.debug("--------getDbSourceBydbKey------------------从缓存中获取DB连接-------------------");
+//            return cacheDbSource;
+//        } else {
+//            DruidDataSource dataSource = getJdbcDataSource(dbSource);
+//            if(dataSource!=null && dataSource.isEnable()){
+//                DataSourceCachePool.putCacheBasicDataSource(dbKey, dataSource);
+//            }else{
+//                throw new JeecgBootException("动态数据源连接失败，dbKey："+dbKey);
+//            }
+//            log.info("--------getDbSourceBydbKey------------------创建DB数据库连接-------------------");
+//            return dataSource;
+//        }
+        return null;
     }
 
     /**

@@ -12,7 +12,7 @@ import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
-import org.jeecg.common.util.RedisUtil;
+//import org.jeecg.common.util.RedisUtil;
 import org.jeecg.modules.cas.util.CASServiceUtil;
 import org.jeecg.modules.cas.util.XmlUtils;
 import org.jeecg.modules.system.entity.SysDepart;
@@ -49,8 +49,8 @@ public class CasClientController {
 	private ISysUserService sysUserService;
 	@Autowired
     private ISysDepartService sysDepartService;
-	@Autowired
-    private RedisUtil redisUtil;
+//	@Autowired
+//    private RedisUtil redisUtil;
 	
 	@Value("${cas.prefixUrl}")
     private String prefixUrl;
@@ -84,8 +84,8 @@ public class CasClientController {
 	  		}
 	 		String token = JwtUtil.sign(sysUser.getUsername(), sysUser.getPassword());
 	 		// 设置超时时间
-	 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-	 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
+//	 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
+//	 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
 
 	 		//获取用户部门信息
 			JSONObject obj = new JSONObject();

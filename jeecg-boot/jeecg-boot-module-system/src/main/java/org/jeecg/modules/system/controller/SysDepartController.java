@@ -35,7 +35,7 @@ import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.redis.core.RedisTemplate;
+//import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,8 +60,8 @@ public class SysDepartController {
 
 	@Autowired
 	private ISysDepartService sysDepartService;
-	@Autowired
-	public RedisTemplate<String, Object> redisTemplate;
+//	@Autowired
+//	public RedisTemplate<String, Object> redisTemplate;
 	@Autowired
 	private ISysUserService sysUserService;
 	@Autowired
@@ -389,10 +389,10 @@ public class SysDepartController {
 					num++;
                 }
 				//清空部门缓存
-				Set keys3 = redisTemplate.keys(CacheConstant.SYS_DEPARTS_CACHE + "*");
-				Set keys4 = redisTemplate.keys(CacheConstant.SYS_DEPART_IDS_CACHE + "*");
-				redisTemplate.delete(keys3);
-				redisTemplate.delete(keys4);
+//				Set keys3 = redisTemplate.keys(CacheConstant.SYS_DEPARTS_CACHE + "*");
+//				Set keys4 = redisTemplate.keys(CacheConstant.SYS_DEPART_IDS_CACHE + "*");
+//				redisTemplate.delete(keys3);
+//				redisTemplate.delete(keys4);
 				return ImportExcelUtil.imporReturnRes(errorMessageList.size(), listSysDeparts.size() - errorMessageList.size(), errorMessageList);
             } catch (Exception e) {
                 log.error(e.getMessage(),e);
