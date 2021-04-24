@@ -15,7 +15,8 @@ import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
-import org.jeecg.common.util.RedisUtil;
+import org.jeecg.common.util.AbstractCacheUtil;
+//import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.oConvertUtils;
 import org.springframework.context.annotation.Lazy;
@@ -37,9 +38,9 @@ public class ShiroRealm extends AuthorizingRealm {
     @Resource
     private CommonAPI commonAPI;
 
-    @Lazy
-    @Resource
-    private RedisUtil redisUtil;
+	@Lazy
+    @Resource(name = "guavaCacheUtil")
+    private AbstractCacheUtil cacheUtil;
 
     /**
      * 必须重写此方法，不然Shiro会报错
@@ -144,14 +145,14 @@ public class ShiroRealm extends AuthorizingRealm {
      * @return
      */
     public boolean jwtTokenRefresh(String token, String userName, String passWord) {
-        String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
+        String cacheToken = String.valueOf(cacheUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
         if (oConvertUtils.isNotEmpty(cacheToken)) {
             // 校验token有效性
             if (!JwtUtil.verify(cacheToken, userName, passWord)) {
                 String newAuthorization = JwtUtil.sign(userName, passWord);
                 // 设置超时时间
-                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
-                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);
+                cacheUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
+                cacheUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);
                 log.debug("——————————用户在线操作，更新token保证不掉线—————————jwtTokenRefresh——————— "+ token);
             }
             //update-begin--Author:scott  Date:20191005  for：解决每次请求，都重写redis中 token缓存问题

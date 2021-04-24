@@ -28,7 +28,7 @@
 		<mysql-connector-java.version>8.0.21</mysql-connector-java.version>
 		<dynamic-datasource-spring-boot-starter.version>3.2.0</dynamic-datasource-spring-boot-starter.version>
 		<hutool-all.version>5.3.8</hutool-all.version>
-		<redisson.version>3.13.6</redisson.version>
+<!--		<redisson.version>3.13.6</redisson.version>-->
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<guava.version>29.0-jre</guava.version>
 		<mybatis-plus.version>3.4.1</mybatis-plus.version>
@@ -38,7 +38,7 @@
 		<aliyun.oss.version>3.11.2</aliyun.oss.version>
 		<shiro.version>1.7.1</shiro.version>
 		<java-jwt.version>3.11.0</java-jwt.version>
-		<shiro-redis.version>3.1.0</shiro-redis.version>
+<!--		<shiro-redis.version>3.1.0</shiro-redis.version>-->
 		<codegenerate.version>1.3.1</codegenerate.version>
 		<autopoi-web.version>1.3</autopoi-web.version>
 		<minio.version>8.0.3</minio.version>
@@ -51,10 +51,6 @@
         <module>jeecg-boot-base</module>
         <module>jeecg-boot-module-demo</module>
         <module>jeecg-boot-module-system</module>
-
-       <!-- 需要微服务，请打开注释
-       <module>jeecg-boot-starter</module>
-        <module>jeecg-cloud-module</module>-->
 	</modules>
 
 	<distributionManagement>
@@ -109,23 +105,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- spring-cloud-->
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<!-- spring-cloud-alibaba -->
-			<dependency>
-				<groupId>com.alibaba.cloud</groupId>
-				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
 			<!-- system 模块-->
 			<dependency>
 				<groupId>org.jeecgframework.boot</groupId>
@@ -151,19 +130,6 @@
 				<artifactId>jeecg-system-local-api</artifactId>
 				<version>${jeecgboot.version}</version>
 			</dependency>
-			<!-- system 微服务 api -->
-			<dependency>
-				<groupId>org.jeecgframework.boot</groupId>
-				<artifactId>jeecg-system-cloud-api</artifactId>
-				<version>${jeecgboot.version}</version>
-			</dependency>
-
-            <!--微服务模块-->
-            <dependency>
-                <groupId>org.jeecgframework.boot</groupId>
-                <artifactId>jeecg-boot-starter-cloud</artifactId>
-                <version>${jeecgboot.version}</version>
-            </dependency>
 
 			<!--xxl-job定时任务-->
 			<dependency>
@@ -171,21 +137,6 @@
 				<artifactId>jeecg-boot-starter-job</artifactId>
 				<version>${jeecgboot.version}</version>
 			</dependency>
-
-			<!--redis分布式锁-->
-			<dependency>
-				<groupId>org.jeecgframework.boot</groupId>
-				<artifactId>jeecg-boot-starter-lock</artifactId>
-				<version>${jeecgboot.version}</version>
-			</dependency>
-
-			<!--rabbitmq消息队列-->
-			<dependency>
-				<groupId>org.jeecgframework.boot</groupId>
-				<artifactId>jeecg-boot-starter-rabbitmq</artifactId>
-				<version>${jeecgboot.version}</version>
-			</dependency>
-
 
 			<!-- 七牛云SDK -->
 			<dependency>
@@ -204,12 +155,6 @@
 				<groupId>dom4j</groupId>
 				<artifactId>dom4j</artifactId>
 				<version>${dom4j.version}</version>
-			</dependency>
-			<!-- redisson -->
-			<dependency>
-				<groupId>org.redisson</groupId>
-				<artifactId>redisson</artifactId>
-				<version>${redisson.version}</version>
 			</dependency>
 
 			<!-- guava工具类 -->
